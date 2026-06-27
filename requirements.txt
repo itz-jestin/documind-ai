@@ -12,4 +12,4 @@ langchain-community==0.3.29
 
 openai==1.55.3
 
-protobuf==5.29.7
+protobuf==5.29.6
