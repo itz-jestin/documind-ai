@@ -45,11 +45,21 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     start=time.time()
     text = extract_pdf_text(file_path)
+    print("Text length:", len(text))
+    print("Text Preview:")
+    print(repr(text[:500]))
+    print("=" * 50)
+    print("First 300 characters:")
+    print(repr(text[:300]))
     print("PDF Extraction Time:", time.time() - start)  
 
     start=time.time()
     chunks = split_by_sentences(text,sentences_per_chunk=4)
-    print("Chunking Time:", time.time() - start)
+    print("Chunks:", len(chunks))
+    if chunks:
+        print("First chunk:")
+        print(chunks[0])
+        print("Chunking Time:", time.time() - start)
 
     start=time.time()
     store_chunks(chunks,file.filename)
