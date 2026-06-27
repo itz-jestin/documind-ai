@@ -9,6 +9,7 @@ from pypdf import PdfReader
 import os
 import time
 
+os.makedirs("uploads",exist_ok=True)
 
 app = FastAPI()
 app.add_middleware(
