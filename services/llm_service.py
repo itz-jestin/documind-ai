@@ -1,8 +1,8 @@
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 from dotenv import load_dotenv
 import os
 import time
-from pprint import pprint
+
 load_dotenv()
 
 client = OpenAI(
@@ -10,45 +10,48 @@ client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
 )
 
-def ask_llm(context,question):
+def ask_llm(context, question):
 
-    
-    start=time.perf_counter()
-    response=client.chat.completions.create(
-        model="openai/gpt-oss-120b:free",
-        messages=[
-            {
-                "role":"user",
-                "content": f"""
-                Context:
-                {context}
-                
-                Question:
-                {question}
-                
-                Instructions:
-                - Answer only from the provided context.
-                - Generate the answer in less that 10 seconds.
-                - Keep the answer under 50 words.
-                - Do not explain your reasoning.
-                - If the answer is not clearly present, say:
-                  "The information is not available in the PDF."
-                - Do not guess.
-                """
-            }
-        ]
-    )
-    print("LLM Response Time:", time.perf_counter() - start)
-    print("Response object:")
-    print("Choices:", response.choices)
-    
+    start = time.perf_counter()
+
     try:
-        if response.choices:
-            return response.choices[0].message.content
+        response = client.chat.completions.create(
+            model="openai/gpt-oss-120b:free",
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"""
+Context:
+{context}
 
-        return "LLM unavailable. Please try again."
+Question:
+{question}
+
+Instructions:
+- Answer only from the provided context.
+- Keep the answer under 50 words.
+- Do not explain your reasoning.
+- If the answer is not clearly present, say:
+  "The information is not available in the PDF."
+- Do not guess.
+"""
+                }
+            ]
+        )
+
+        print("LLM Response Time:", time.perf_counter() - start)
+
+        return response.choices[0].message.content
+
+    except RateLimitError:
+        print("OpenRouter Rate Limit exceeded.")
+        return "⚠️ The AI service is currently busy. Please try again in a few seconds."
+
     except Exception as e:
-        print("LLM Error:", e)
-        print(response)
-        return f"LLM Error: {e}"
-       
+        print("=" * 50)
+        print("LLM ERROR")
+        print(type(e))
+        print(e)
+        print("=" * 50)
+    
+        return "⚠️ Unable to generate an answer at the moment."
