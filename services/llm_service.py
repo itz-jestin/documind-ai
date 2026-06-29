@@ -43,7 +43,10 @@ def ask_llm(context,question):
     print("Choices:", response.choices)
     
     try:
-        return response.choices[0].message.content
+        if response.choices:
+            return response.choices[0].message.content
+
+        return "LLM unavailable. Please try again."
     except Exception as e:
         print("LLM Error:", e)
         print(response)
