@@ -2,6 +2,7 @@ import os
 import chromadb
 from chromadb.config import Settings
 from services.embedding_service import create_embedding
+import time
 
 CHROMA_PATH = os.getenv("CHROMA_DB_PATH", "./chroma_db")
 
@@ -19,32 +20,34 @@ def get_collection():
 
 def store_chunks(chunks, pdf_name):
 
+    start = time.time()
     collection = get_collection()
+    print("Get collection:", time.time() - start)
 
+    start = time.time()
     existing_ids = collection.get()["ids"]
+    print("Get existing ids:", time.time() - start)
 
     if existing_ids:
+        start = time.time()
         collection.delete(ids=existing_ids)
-
-    print("Total Chunks:", collection.count())
+        print("Delete:", time.time() - start)
 
     ids = [str(i) for i in range(len(chunks))]
+    metadatas = [{"source": pdf_name} for _ in chunks]
 
-    metadatas = [
-        {"source": pdf_name}
-        for _ in chunks
-    ]
-
+    start = time.time()
     embeddings = [create_embedding(chunk) for chunk in chunks]
-    
+    print("Embedding:", time.time() - start)
+
+    start = time.time()
     collection.add(
         ids=ids,
         documents=chunks,
         embeddings=embeddings,
-        metadatas=metadatas
+        metadatas=metadatas,
     )
-
-    print("Total Chunks:", collection.count())
+    print("Add to Chroma:", time.time() - start)
 
     return collection
 
