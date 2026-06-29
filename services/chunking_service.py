@@ -1,10 +1,16 @@
 import nltk
 from nltk.tokenize import sent_tokenize
 
+# Download tokenizer resources
 try:
     nltk.data.find("tokenizers/punkt")
 except LookupError:
     nltk.download("punkt")
+
+try:
+    nltk.data.find("tokenizers/punkt_tab")
+except LookupError:
+    nltk.download("punkt_tab")
 
 def split_by_sentences(text, sentences_per_chunk=5):
 
