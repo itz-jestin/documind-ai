@@ -51,14 +51,19 @@ def store_chunks(chunks, pdf_name):
 
     return collection
 
-def search_chunks(question, n_results=8):
+def search_chunks(question, n_results=5):
 
     collection = get_collection()
+    start = time.perf_counter()
     embedding = create_embedding(question)
+    print("Embedding:", time.perf_counter() - start)
+    
+    start = time.perf_counter()
     results = collection.query(
         query_embeddings=[embedding],
         n_results=n_results
     )
+    print("Query:", time.perf_counter() - start)
     print("Question:", question)
     print("Retrieved Chunks:", len(results["documents"][0]))
     return results

@@ -40,7 +40,6 @@ def ask_llm(context,question):
     )
     print("LLM Response Time:", time.perf_counter() - start)
     print("Response object:")
-    pprint(response.model_dump())
     print("Choices:", response.choices)
     
     try:
