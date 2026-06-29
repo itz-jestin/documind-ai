@@ -1,7 +1,7 @@
 import os
 import chromadb
 from chromadb.config import Settings
-from services.embedding_service import create_embedding
+from services.embedding_service import create_embeddings
 import time
 
 CHROMA_PATH = os.getenv("CHROMA_DB_PATH", "./chroma_db")
@@ -37,7 +37,7 @@ def store_chunks(chunks, pdf_name):
     metadatas = [{"source": pdf_name} for _ in chunks]
 
     start = time.time()
-    embeddings = [create_embedding(chunk) for chunk in chunks]
+    embeddings = create_embeddings(chunks)
     print("Embedding:", time.time() - start)
 
     start = time.time()
@@ -53,9 +53,7 @@ def store_chunks(chunks, pdf_name):
 
 def search_chunks(question, n_results=8):
 
-    collection = client.get_collection(
-        name="pdf_chunks"
-    )
+    collection = get_collection()
     embedding = create_embedding(question)
     results = collection.query(
         query_embeddings=[embedding],
