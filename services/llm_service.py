@@ -7,7 +7,7 @@ load_dotenv()
 
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url="https://openrouter.ai/api/v1",
+    base_url="https://router.bynara.id/v1",
 )
 
 def ask_llm(context, question):
@@ -16,7 +16,7 @@ def ask_llm(context, question):
 
     try:
         response = client.chat.completions.create(
-            model="openai/gpt-oss-120b:free",
+            model="mimo-v2.5-free",
             messages=[
                 {
                     "role": "user",
