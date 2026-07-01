@@ -16,7 +16,6 @@ def split_by_sentences(text, sentences_per_chunk=5):
 
     sentences = sent_tokenize(text)
 
-    print("Sentence count:", len(sentences))
 
     chunks = []
 
@@ -24,6 +23,6 @@ def split_by_sentences(text, sentences_per_chunk=5):
         chunk = " ".join(sentences[i:i + sentences_per_chunk])
         chunks.append(chunk)
 
-    print("Chunk count:", len(chunks))
+    
 
     return chunks

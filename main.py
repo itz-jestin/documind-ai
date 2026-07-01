@@ -44,17 +44,11 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     start=time.time()
     text = extract_pdf_text(file_path)
-    print("Text length:", len(text))
-    print("Text Preview:")
-    print(repr(text[:500]))
-    print("=" * 50)
-    print("First 300 characters:")
-    print(repr(text[:300]))
     print("PDF Extraction Time:", time.time() - start)  
 
     start=time.time()
     chunks = split_by_sentences(text,sentences_per_chunk=4)
-    print("Chunks:", len(chunks))
+
     if chunks:
         print("First chunk:")
         print(chunks[0])
@@ -90,15 +84,13 @@ async def ask_pdf(data: QuestionRequest):
        print(f"\nChunk {i}:")
        print(chunk[:300])
 
-    print("\nSources:")
-    print(results["metadatas"][0])
+
     chunks=results["documents"][0]
     context = "\n\n".join(
     [f"Chunk {i+1}:\n{chunk}"
      for i, chunk in enumerate(chunks)])
 
-    print(results["metadatas"])
-    print("Total Chunks:", get_count())
+
     start=time.time()
     answer = ask_llm(
         context,

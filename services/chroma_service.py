@@ -64,8 +64,6 @@ def search_chunks(question, n_results=5):
         n_results=n_results
     )
     print("Query:", time.perf_counter() - start)
-    print("Question:", question)
-    print("Retrieved Chunks:", len(results["documents"][0]))
     return results
 
 def get_count():
