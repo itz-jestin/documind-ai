@@ -21,24 +21,24 @@ def ask_llm(context, question):
                 {
                     "role": "user",
                     "content": f"""
-
-Context:
-{context}
-
-Question:
-{question}
-
-Instructions:
-- Answer only from the provided context.
-- Keep the answer under 50 words.
-- Do not explain your reasoning.
-- If the answer is not clearly present, say:
-  "The information is not available in the PDF."
-- Do not guess.
-"""
-                }
-            ]
-        )
+                    
+                    Context:
+                    {context}
+                    
+                    Question:
+                    {question}
+                    
+                    Instructions:
+                    - Answer only from the provided context.
+                    - Keep the answer under 50 words.
+                    - Do not explain your reasoning.
+                    - If the answer is not clearly present, say:
+                      "The information is not available in the PDF."
+                    - Do not guess.
+                    """
+                                    }
+                                ]
+                            )
 
         print("LLM Response Time:", time.perf_counter() - start)
 
