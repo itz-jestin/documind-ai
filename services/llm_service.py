@@ -16,11 +16,12 @@ def ask_llm(context, question):
 
     try:
         response = client.chat.completions.create(
-            model="google/gemini-2.5-flash",
+            model="openai/gpt-oss-120b:free",
             messages=[
                 {
                     "role": "user",
                     "content": f"""
+
 Context:
 {context}
 
